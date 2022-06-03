@@ -1,0 +1,30 @@
+File: Makefile
+Line 184: Added _testfs\ to UPROGS to compile and test run the program
+Line 258: Added testfs.c\
+
+File: fs.c
+Line 400-429: Added my implementation of a doubly indirect block. 
+I first check if bn is pointing to the doubly indirect block.
+If it is, I check is that block is empty or not, if it is I allocate
+it using balloc. Then I get the second level block pointer using bread
+and store the second level data into a. I then calculate the index of the 
+second block and then check if the third level is empty or not using the 
+index. If it is, I allocate it using balloc and then write to it using 
+log_write. I then release the second level buffer and get the third level
+block pointer using read and get the data into a. After calculating the 
+third level index we again allocate a block if we need to and then write 
+to it, ultimately releasing the third level buffer and returning addr.
+
+File: file.h
+Line 25: Incremented size of addrs array by 1 for our new doubly indirect
+block
+
+File: param.h
+Line 13: Changed definition of FSSize to 20000 from 1000
+
+File: fs.h
+Line 24: Changed NDIRECT to 11 instead of 12
+Line 26: Added definition of NDOUBLYINDIRECT
+Line 27: Added addition of NDOUBLYINDIRECT to definition of MAXFILE
+Line 36: Incremented size of addrs array by 1 for our new doubly indirect
+block
